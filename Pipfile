@@ -1,0 +1,14 @@
+[[source]]
+url = "https://pypi.tuna.tsinghua.edu.cn/simple/"
+verify_ssl = true
+
+[dev-packages]
+django1-9-8 = "*"
+django = "==1.9.8"
+
+[packages]
+pymysql = "*"
+pillow = "*"
+
+[requires]
+python_version = "3.7"
