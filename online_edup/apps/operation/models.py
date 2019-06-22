@@ -42,7 +42,7 @@ class UserFavorite(models.Model):
 
 class UserMessage(models.Model):
     user = models.IntegerField(default=0, verbose_name='接收用户')  #: 当接收用户的id为0的时候表明这条消息是发给所有用户的
-    Message = models.CharField(max_length=500, verbose_name='消息内容')
+    message = models.CharField(max_length=500, verbose_name='消息内容')
     has_read = models.BooleanField(default=False, verbose_name='是否已读')
     add_time = models.DateTimeField(default=datetime.now, verbose_name='添加时间')
 
