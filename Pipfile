@@ -9,6 +9,7 @@ django = "==1.9.8"
 [packages]
 pymysql = "*"
 pillow = "*"
+django-simple-captcha = "*"
 
 [requires]
 python_version = "3.7"
