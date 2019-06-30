@@ -126,6 +126,3 @@ class ModifyPwdView(View):
             return render(request, 'login.html')
         else:
             return render(request, 'password_reset.html', {"email": email, "modify_form": modify_form})
-
-
-

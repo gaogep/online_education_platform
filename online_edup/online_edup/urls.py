@@ -15,9 +15,13 @@ Including another URLconf
 """
 from django.conf.urls import url, include
 from django.views.generic import TemplateView
+from django.views.static import serve
+
 import xadmin
 
+from online_edup.settings import MEDIA_ROOT
 from users.views import LoginView, RegisterView, ActiveUserView, ForgetView, ResetView, ModifyPwdView
+
 
 urlpatterns = [
     url(r'^xadmin/', xadmin.site.urls),
@@ -29,4 +33,7 @@ urlpatterns = [
     url('^forget/$', ForgetView.as_view(), name="forgetpwd"),
     url('^reset/(?P<active_code>.*)/$', ResetView.as_view(), name="resetpwd"),
     url('^modifypwd/$', ModifyPwdView.as_view(), name="modifypwd"),
+    url('^media/(?P<path>.*)$', serve, {'document_root': MEDIA_ROOT}),
+    # 课程机构url配置
+    url('^org/', include('organization.urls', namespace="org")),
 ]
