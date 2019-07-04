@@ -131,7 +131,7 @@ class OrgTeacherView(View):
         course_org = CourseOrg.objects.get(id=int(org_id))
         all_teachers = course_org.teacher_set.all()
         has_fav = False
-        if request.user.is_authenticated:
+        if request.user.is_authenticated():
             if UserFavorite.objects.filter(user=request.user, fav_id=course_org.id, fav_type=2):
                 has_fav = True
         return render(request, 'org-detail-teachers.html', {
@@ -149,7 +149,7 @@ class AddFavView(View):
         fav_type = request.POST.get('fav_type', 0)
 
         # 判断用户是否登录 没登录不能收藏
-        if not request.user.is_authenticated:
+        if not request.user.is_authenticated():
             return HttpResponse('{"status":"fail", "msg":"用户未登录"}', content_type='application/json')
 
         exist_record = UserFavorite.objects.filter(user=request.user, fav_id=int(fav_id), fav_type=int(fav_type))
@@ -165,7 +165,6 @@ class AddFavView(View):
                 user_fav.fav_type = int(fav_type)
                 user_fav.save()
                 return HttpResponse('{"status":"success", "msg":"已收藏"}', content_type='application/json')
-
             else:
                 return HttpResponse('{"status":"fail", "msg":"收藏出错"}', content_type='application/json')
 
