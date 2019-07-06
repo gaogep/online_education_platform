@@ -12,7 +12,7 @@ function sendCodeChangeEmail($btn){
         cache: false,
         type: "get",
         dataType:'json',
-        url:"/users/sendemail_code/",
+        url:"/users/update_email/",
         data:$('#jsChangeEmailForm').serialize(),
         async: true,
         beforeSend:function(XMLHttpRequest){
@@ -169,9 +169,9 @@ $(function(){
             },
             success: function(data) {
                 if(data.nick_name){
-                    _showValidateError($('#nick_name'), data.nick_name);
+                    _showValidateError($('#nickname'), data.nick_name);
                 }else if(data.birday){
-                   _showValidateError($('#birth_day'), data.birday);
+                   _showValidateError($('#birthday'), data.birday);
                 }else if(data.address){
                    _showValidateError($('#address'), data.address);
                 }else if(data.status == "failure"){

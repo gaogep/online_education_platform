@@ -23,10 +23,33 @@
 					<div class="fl"><p>服务电话：<b>33333333</b></p></div>
 					<!--登录后跳转-->
 
-
-                        <a style="color:white" class="fr registerbtn" href="register.html">注册</a>
-                        <a style="color:white" class="fr loginbtn" href="login.html">登录</a>
-
+                        {% if not request.user.is_authenticated %}
+                            <a style="color:white" class="fr registerbtn" href="register.html">注册</a>
+                            <a style="color:white" class="fr loginbtn" href="login.html">登录</a>
+                        {% else %}
+                            <div class="personal">
+                                <dl class="user fr">
+                                    <dd>{{ request.user.nickname }}<img class="down fr" src=""/></dd>
+                                    <dt><img width="20" height="20" src="{{ MEDIA_URL }}{{ request.user.image }}"/></dt>
+                                </dl>
+                                <div class="userdetail">
+                                    <dl>
+                                        <dt><img width="80" height="80" src="{{ MEDIA_URL }}{{ request.user.image }}"/></dt>
+                                        <dd>
+                                            <h2>django</h2>
+                                            <p>{{ request.user.nickname }}</p>
+                                        </dd>
+                                    </dl>
+                                    <div class="btn">
+                                        <a class="personcenter fl" href="{% url 'users:user_info' %}">进入个人中心</a>
+                                        <a class="fr" href="/logout/">退出</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <a href="{% url 'users:my_message' %}">
+                                <div class="msg-num"> <span id="MsgNum">{{ request.user.get_unread_numbers }}</span></div>
+                            </a>
+                        {% endif %}
 
 
 				</div>
@@ -57,16 +80,20 @@
 				<div class="nav">
 					<div class="wp">
 						<ul>
-							<li ><a href="index.html">首页</a></li>
-							<li >
-								<a href="course-list.html">
+							<li class="{% if request.path == '/' %}active{% endif %}">
+                                <a href="{% url 'index' %}">首页</a>
+                            </li>
+							<li class="{% if request.path|slice:'7' == '/course' %}active{% endif %}">
+								<a href="{% url 'course:course_list' %}">
 									公开课<img class="hot" src="{% static 'images/nav_hot.png' %}">
 								</a>
 							</li>
-							<li >
-								<a href="teachers-list.html">授课教师</a>
+							<li class="{% if request.path|slice:'12' == '/org/teacher' %}active{% endif %}">
+								<a href="{% url 'org:teacher_list' %}">授课教师</a>
 							</li>
-							<li class="active" ><a href="{% url 'org:org_list' %}">授课机构</a></li>
+							<li class="{% if request.path|slice:'9' == '/org/list' %}active{% endif %}">
+                                <a href="{% url 'org:org_list' %}">授课机构</a>
+                            </li>
 						</ul>
 					</div>
 				</div>

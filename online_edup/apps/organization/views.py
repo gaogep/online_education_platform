@@ -1,12 +1,14 @@
 from django.shortcuts import render
 from django.views.generic import View
 from django.http import HttpResponse
+from django.db.models import Q
 
 from pure_pagination import Paginator, PageNotAnInteger
 
-from .models import CourseOrg, CityDict
+from .models import CourseOrg, CityDict, Teacher
 from .forms import UserAskModelForm
 from operation.models import UserFavorite
+from courses.models import Course
 
 
 class OrgView(View):
@@ -22,6 +24,12 @@ class OrgView(View):
         city_id = request.GET.get('city', "")
         if city_id and city_id != "all":         # 变量名+下划线取外键ID
             all_orgs = all_orgs.filter(city_id=int(city_id))
+
+        # 搜索功能 根据关键词对课程名进行过滤 类似SQL中的Like
+        search_keywords = request.GET.get("keywords", "")
+        if search_keywords:
+            all_orgs = all_orgs.filter(
+                Q(name__icontains=search_keywords) | Q(desc__icontains=search_keywords))
 
         # 类别筛选
         category = request.GET.get('ct', "")
@@ -168,3 +176,44 @@ class AddFavView(View):
             else:
                 return HttpResponse('{"status":"fail", "msg":"收藏出错"}', content_type='application/json')
 
+
+class TeacherList(View):
+    """课程讲师列表"""
+    def get(self, request):
+        all_teachers = Teacher.objects.all()
+
+        # 搜索功能 根据关键词对课程名进行过滤 类似SQL中的Like
+        search_keywords = request.GET.get("keywords", "")
+        if search_keywords:
+            all_teachers = all_teachers.filter(Q(name__icontains=search_keywords) |
+                                               Q(work_company__icontains=search_keywords))
+
+        sort = request.GET.get('sort', '')
+        if sort:
+            all_teachers = all_teachers.order_by('-click_nums')
+
+        sorted_teachers = Teacher.objects.order_by('-click_nums')[:3]
+
+        try:
+            page = request.GET.get('page', 1)
+        except PageNotAnInteger:
+            page = 1
+        p = Paginator(all_teachers, request=request, per_page=1)
+        teachers = p.page(page)
+        return render(request, 'teachers-list.html', {
+            'all_teachers': teachers,
+            'sorted_teachers': sorted_teachers,
+            'sort': sort
+        })
+
+
+class TeacherDetail(View):
+    def get(self, request, teacher_id):
+        teacher = Teacher.objects.get(id=teacher_id)
+        courses = Course.objects.filter(teacher=teacher)
+        sorted_teachers = Teacher.objects.order_by('-click_nums')[:3]
+        return render(request, 'teacher-detail.html', {
+            'teacher': teacher,
+            'courses': courses,
+            'sorted_teachers': sorted_teachers
+        })

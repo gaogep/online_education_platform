@@ -27,7 +27,7 @@ def generate_random_str(randomlength=8):
 
 def send_email(email, send_type="register"):
     email_record = EmailVerifyRecord()
-    code = generate_random_str()
+    code = generate_random_str(4)
     email_record.code = code
     email_record.email = email
     email_record.send_type = send_type
@@ -41,6 +41,12 @@ def send_email(email, send_type="register"):
     elif send_type == "forget":
         email_title = "找回密码"
         email_body = "请点击下面的链接找回你的密码 http://" + main_url + "/reset/" + f"{code}"
+        send_status = send_mail(email_title, email_body, EMAIL_FROM, [email])
+        if send_status:
+            pass
+    elif send_type == "update":
+        email_title = "修改邮箱"
+        email_body = f"你的验证码为: {code}"
         send_status = send_mail(email_title, email_body, EMAIL_FROM, [email])
         if send_status:
             pass
