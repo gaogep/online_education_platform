@@ -18,6 +18,7 @@ class CityDict(models.Model):
 
 class CourseOrg(models.Model):
     name = models.CharField(max_length=50, verbose_name='机构名称')
+    tag = models.CharField(max_length=10, verbose_name='标签', default='知名机构')
     desc = models.TextField(verbose_name='机构描述')
     category = models.CharField(max_length=20, choices=(('px', '培训机构'), ('gr', '个人'), ('gx', '高校')),
                                 verbose_name='机构类别', default='px')

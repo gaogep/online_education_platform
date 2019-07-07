@@ -14,26 +14,31 @@ Including another URLconf
     2. Add a URL to urlpatterns:  url(r'^blog/', include('blog.urls'))
 """
 from django.conf.urls import url, include
-from django.views.generic import TemplateView
 from django.views.static import serve
 
 import xadmin
 
-from online_edup.settings import MEDIA_ROOT
-from users.views import LoginView, RegisterView, ActiveUserView, ForgetView, ResetView, ModifyPwdView
+from online_edup.settings import MEDIA_ROOT, STATIC_ROOT
+from users.views import IndexView, LoginView, LogoutView, RegisterView, ActiveUserView, ForgetView, ResetView, ModifyPwdView
 
 
 urlpatterns = [
     url(r'^xadmin/', xadmin.site.urls),
-    url('^$', TemplateView.as_view(template_name='index.html'), name="index"),
+    url('^$', IndexView.as_view(), name="index"),
     url('^login/$', LoginView.as_view(), name="login"),
+    url('^logout/$', LogoutView.as_view(), name="logout"),
     url('^register/$', RegisterView.as_view(), name="register"),
     url('^captcha/', include('captcha.urls')),
     url('^active/(?P<active_code>.*)/$', ActiveUserView.as_view(), name="user_active"),
     url('^forget/$', ForgetView.as_view(), name="forgetpwd"),
     url('^reset/(?P<active_code>.*)/$', ResetView.as_view(), name="resetpwd"),
     url('^modifypwd/$', ModifyPwdView.as_view(), name="modifypwd"),
+
+    # 配置上传文件的处理函数
     url('^media/(?P<path>.*)$', serve, {'document_root': MEDIA_ROOT}),
+
+    # 配置上传文件的处理函数
+    url('^static/(?P<path>.*)$', serve, {'document_root': STATIC_ROOT}),
 
     # 课程机构url配置
     url('^org/', include('organization.urls', namespace="org")),

@@ -77,8 +77,9 @@ class CourseInfoView(LoginRequiredMixin, View):
     """课程章节信息"""
     def get(self, request, course_id):
         course = Course.objects.get(id=int(course_id))
+        course.students += 1
+        course.save()
         all_resources = CourseResource.objects.filter(course=course)
-
         # 查询用户是否关联了该课程
         user_course = UserCourse.objects.filter(user=request.user, course=course)
         if not user_course:
@@ -133,7 +134,7 @@ class AddComment(View):
 class VideoPlay(View):
     """视频播放页面"""
     def get(self, request, video_id):
-        video =  Video.objects.get(id=int(video_id))
+        video = Video.objects.get(id=int(video_id))
         course = video.lesson.course
         all_resources = CourseResource.objects.filter(course=course)
 

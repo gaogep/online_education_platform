@@ -20,6 +20,7 @@ class Course(models.Model):
     category = models.CharField(max_length=20, verbose_name='课程类别', default='后端开发')
     tag = models.CharField(max_length=10, verbose_name='标签', default='')
     teacher = models.ForeignKey(Teacher, verbose_name='讲师', null=True, blank=True)
+    is_banner = models.BooleanField(default=False, verbose_name='是否轮播')
 
     class Meta:
         verbose_name = '课程'

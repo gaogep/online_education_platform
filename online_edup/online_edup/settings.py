@@ -28,9 +28,9 @@ sys.path.insert(0, os.path.join(BASE_DIR, 'extra_apps'))
 SECRET_KEY = '&&lp%*88w#y@z@hfgs=-@@%@z3i30xqe(efb0=k_(0fqxt(=h_'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 AUTHENTICATION_BACKENDS = (
@@ -147,6 +147,9 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "static"),
 ]
 
+# 当DEBUG为False的时候 django不再代理静态文件 所以要自己配置
+STATIC_ROOT = os.path.join(BASE_DIR, "static")
+
 # 邮件发送相关配置
 EMAIL_HOST = 'smtp.sina.com'
 EMAIL_PORT = 25
@@ -166,3 +169,10 @@ PAGINATION_SETTINGS = {
 
     'SHOW_FIRST_PAGE_WHEN_INVALID': True,
 }
+
+
+# 只有DEBUG=FALSE的时候才会开启
+# 添加404全局配置
+handler404 = 'users.views.page_not_found'
+# 添加500全局配置
+handler500 = 'users.views.page_error'
