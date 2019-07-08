@@ -28,7 +28,7 @@ sys.path.insert(0, os.path.join(BASE_DIR, 'extra_apps'))
 SECRET_KEY = '&&lp%*88w#y@z@hfgs=-@@%@z3i30xqe(efb0=k_(0fqxt(=h_'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
@@ -148,7 +148,7 @@ STATICFILES_DIRS = [
 ]
 
 # 当DEBUG为False的时候 django不再代理静态文件 所以要自己配置
-STATIC_ROOT = os.path.join(BASE_DIR, "static")
+# STATIC_ROOT = os.path.join(BASE_DIR, "static")
 
 # 邮件发送相关配置
 EMAIL_HOST = 'smtp.sina.com'

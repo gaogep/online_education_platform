@@ -32,6 +32,11 @@ class Course(models.Model):
     def get_chapter_nums(self):
         # 获取课程章节数
         return self.lesson_set.all().count()
+    get_chapter_nums.short_description = '章节数'
+
+    def go_to(self):
+        from django.utils.safestring import mark_safe
+        return mark_safe("<a href='https://www.baidu.com'>跳转</a>")
 
     def get_students(self):
         # 获取学习这门课程的人的头像
@@ -40,6 +45,13 @@ class Course(models.Model):
     def get_course_lesson(self):
         # 获取课程所有章节
         return self.lesson_set.all()
+
+
+class BannerCourse(Course):
+    class Meta:
+        verbose_name = '轮播课程'
+        verbose_name_plural = verbose_name
+        proxy = True
 
 
 class Lesson(models.Model):
