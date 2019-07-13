@@ -30,6 +30,7 @@ class CourseAdmin:                                                              
     inlines = [LessonInline, CourseResourceInline]    # 章节管理器
     list_editable = ['degree', 'desc']    # 这里的字段在展示页面可以直接进行编辑
     refresh_times = [3, 5]      # 设置页面刷新间隔时间
+    model_icon                  # 设置默认的icon
 
     def queryset(self):  # 通过字段过滤将课程分为课程和轮播课程两种不同的管理器
         qs = super().queryset()
